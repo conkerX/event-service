@@ -1,0 +1,28 @@
+// Entity types in the system
+export enum EntityType {
+  TASK = "TASK",
+  CONTROL = "CONTROL",
+  PROCESS = "PROCESS",
+  PROCESS_INSTANCE = "PROCESS_INSTANCE",
+}
+
+// Types of events that can occur
+export enum EventType {
+  CREATED = "CREATED",
+  STATUS_CHANGE = "STATUS_CHANGE",
+  ASSIGNMENT = "ASSIGNMENT",
+  STAKEHOLDER_ADDED = "STAKEHOLDER_ADDED",
+  STAKEHOLDER_REMOVED = "STAKEHOLDER_REMOVED",
+  COMMENT_ADDED = "COMMENT_ADDED",
+  DUE_DATE_CHANGED = "DUE_DATE_CHANGED",
+  PROCESS_INITIATED = "PROCESS_INITIATED",
+  INSTANCE_COMPLETED = "INSTANCE_COMPLETED",
+}
+
+// Types of changes in event details
+export enum ChangeType {
+  ADDED = "ADDED",
+  REMOVED = "REMOVED",
+  MODIFIED = "MODIFIED",
+  UNCHANGED = "UNCHANGED",
+}

@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===============================
+// Event Tracking Models
+// ===============================
+model Event {
+  id         String        @id @default(uuid())
+  entityType EntityType    @map("entity_type")
+  entityId   String        @map("entity_id")
+  eventType  EventType     @map("event_type")
+  sourceId   String        @map("source_id")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  createdBy  String        @map("created_by")
+  metadata   Json          @default("{}")
+  parentEntityType EntityType? @map("parent_entity_type")
+  parentEntityId   String?     @map("parent_entity_id")
+  rootEntityType   EntityType? @map("root_entity_type")
+  rootEntityId     String?     @map("root_entity_id")
+  details    EventDetail[]
+
+  @@index([entityType])
+  @@index([entityId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@index([createdBy])
+  @@index([entityType, entityId])
+  @@index([parentEntityType, parentEntityId])
+  @@index([rootEntityType, rootEntityId])
+  @@map("events")
+}
+
+model EventDetail {
+  id         String      @id @default(uuid())
+  eventId    String      @map("event_id")
+  fieldName  String      @map("field_name")
+  oldValue   String?     @map("old_value")
+  newValue   String?     @map("new_value")
+  changeType ChangeType? @map("change_type")
+  createdAt  DateTime    @default(now()) @map("created_at")
+  event      Event       @relation(fields: [eventId], references: [id])
+
+  @@index([eventId])
+  @@map("event_details")
+}
+
+enum EntityType {
+  TASK
+  CONTROL
+  PROCESS
+  PROCESS_INSTANCE
+}
+
+enum EventType {
+  CREATED
+  STATUS_CHANGE
+  ASSIGNMENT
+  STAKEHOLDER_ADDED
+  STAKEHOLDER_REMOVED
+  COMMENT_ADDED
+  DUE_DATE_CHANGED
+  PROCESS_INITIATED
+  INSTANCE_COMPLETED
+}
+
+enum ChangeType {
+  ADDED
+  REMOVED
+  MODIFIED
+  UNCHANGED
+}
